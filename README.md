@@ -14,6 +14,11 @@ Nagios plugin to monitor puppet run results and last run time
 
     command[check_puppet_run]=/usr/lib/nagios/plugins/check_puppet_run
 
+* By default, the location of the state file is not readable by unprivileged users, add the following to your sudo config
+
+    nagios    ALL=(ALL) NOPASSWD:/usr/lib/nagios/plugins/check_puppet_run
+
+
 ## Examples
 
 * Run with the --help argument to see all options
