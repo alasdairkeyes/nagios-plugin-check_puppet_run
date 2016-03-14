@@ -12,7 +12,7 @@ Nagios plugin to monitor puppet run results and last run time
 * Copy the check_puppet_run to your nagios plugin folder and set executable
 * Add a line to your nrpe.cfg file
 
-    command[check_puppet_run]=/usr/lib/nagios/plugins/check_puppet_run
+    command[check_puppet_run]=sudo /usr/lib/nagios/plugins/check_puppet_run
 
 * By default, the location of the state file is not readable by unprivileged users, add the following to your sudo config
 
