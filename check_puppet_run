@@ -8,7 +8,7 @@
     use Nagios::Plugin qw(%ERRORS);
     use Getopt::Long;
 
-    my $VERSION = 0.1;
+    my $VERSION = 0.2;
 
 ## Defaults
     my $default_state_file          = '/var/lib/puppet/state/last_run_summary.yaml';
@@ -64,7 +64,7 @@
 ## Get process last run times
     my $run_timeout_seconds = $run_timeout_minutes * 60;
     my $last_run_epoch      = $yaml->{ time }{ last_run }
-        || quite ("CRITICAL", "Failed to get last_run");
+        || quit ("CRITICAL", "Failed to get last_run");
     my $last_run            = localtime($last_run_epoch);
     my $now                 = time;
 
