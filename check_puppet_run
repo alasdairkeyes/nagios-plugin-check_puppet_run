@@ -8,7 +8,7 @@
     use Nagios::Plugin qw(%ERRORS);
     use Getopt::Long;
 
-    my $VERSION = 0.2;
+    my $VERSION = 0.3;
 
 ## Defaults
     my $default_state_file          = '/var/lib/puppet/state/last_run_summary.yaml';
@@ -52,6 +52,7 @@
 
     my $contents = join('',<$fh>);
 
+
 ## Puppet has no trailing newline on the file, which breaks YAML module, add it here
     $contents = $contents . "\n";
     my $yaml = eval {
@@ -67,17 +68,31 @@
         || quit ("CRITICAL", "Failed to get last_run");
     my $last_run            = localtime($last_run_epoch);
     my $now                 = time;
+    my $successes   = defined($yaml->{ events       }{ success  }) 
+        ? $yaml->{ events       }{ success  }
+        : '-';
+    my $failures    = defined($yaml->{ events       }{ failure  })
+        ? $yaml->{ events       }{ failure  }
+        : '-';
+    my $changes     = defined($yaml->{ changes      }{ total    })
+        ? $yaml->{ changes      }{ total    }
+        : '-';
+    my $resources   = defined($yaml->{ resources    }{ total    })
+        ? $yaml->{ resources    }{ total    }
+        : '-';
 
+    quit ("CRITICAL", "Failed to get run metrics from state file - Last Puppet run Failed")
+        if (grep { $_ eq '-' } $successes, $failures,$changes,$resources);
 
 
 ## Produce info string
     my $info = join(' ',
-        "Successes:$yaml->{ events }{ success }",
-        "Failures:$yaml->{ events }{ failure }",
+        "Successes:$successes",
+        "Failures:$failures",
         "Last Run:$last_run",
         "Version:$yaml->{ version }{ puppet }",
-        "Changes:$yaml->{ changes }{ total }",
-        "Resources:$yaml->{ resources }{ total }",
+        "Changes:$changes",
+        "Resources:$resources",
     );
 
 
