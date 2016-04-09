@@ -51,6 +51,7 @@
         || quit ("CRITICAL", "Cannot read state file: $!");
 
     my $contents = join('',<$fh>);
+    close ($fh);
 
 
 ## Puppet has no trailing newline on the file, which breaks YAML module, add it here
