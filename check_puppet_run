@@ -5,7 +5,7 @@
     use strict;
     use warnings;
     use YAML;
-    use Nagios::Plugin qw(%ERRORS);
+    use Monitoring::Plugin qw(%ERRORS);
     use Getopt::Long;
 
     my $VERSION = 0.4;
